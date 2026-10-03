@@ -1,4 +1,4 @@
-from matrix import Matrix 
+from .matrix import Matrix 
 import math
 
 def shape(self: Matrix) -> tuple:
@@ -7,7 +7,7 @@ def shape(self: Matrix) -> tuple:
     return (self.rows, self.cols)
 
 def transpose(self: Matrix) -> Matrix:
-    result = [[self[j][i] for j in range(self.cols)] for i in range(self.rows)]
+    result = [[self[i][j] for i in range(self.rows)] for j in range(self.cols)]
     return Matrix(result)
 
 def matmul(self: Matrix, other: Matrix) -> Matrix:
@@ -109,7 +109,7 @@ def vector_to_matrix(vector: list) -> Matrix:
     return Matrix(mat)
 
 def is_symmetric(self):
-    return A == transpose(A)
+    return self == transpose(self)
 
 def is_orthogonal(self):
     result = matmul(self, transpose(self))
@@ -163,10 +163,10 @@ def gaussian_elimination(A, b):
 
     return vector_to_matrix(x)
 
-def determinant(self: matrix) -> float:
+def determinant(self: Matrix) -> float:
     if self.rows != self.cols:
         raise ValueError("Matrix must be a square Matrix")
-    aug_matrix = Matrix([list(self.data[i]) for i in range(A.rows)])
+    aug_matrix = Matrix([list(self.data[i]) for i in range(self.rows)])
     total_swaps = 0
     def _apply_partial_pivoting(matrix, k):
         nonlocal total_swaps
@@ -239,7 +239,7 @@ def inverse(self: Matrix) -> Matrix:
     return transpose(Matrix(inverse_mat))
 
 def rank(self):
-    aug_matrix = Matrix([list(self.data[i]) for i in range(A.rows)])
+    aug_matrix = Matrix([list(self.data[i]) for i in range(self.rows)])
     def _apply_partial_pivoting(matrix, k):
         max_val = abs(matrix[k, k])
         max_row = k
@@ -252,24 +252,29 @@ def rank(self):
         if max_row != k:
             matrix.data[k], matrix.data[max_row] = (matrix.data[max_row], matrix.data[k])
         return matrix
-
+    
+    EPS = 1e-12
     # Creating an upper Triangular Matrix
-    for i in range(aug_matrix.rows):
+    for i in range(min(aug_matrix.rows, aug_matrix.cols)):
 
-        if abs(aug_matrix[i, i]) < 1e-12:
-            continue
         aug_matrix = _apply_partial_pivoting(aug_matrix, i)
+        if abs(aug_matrix[i, i]) < EPS:
+            continue
         for j in range(i+1, aug_matrix.rows):
             fact = aug_matrix[j,i]/ aug_matrix[i, i]
             for col_idx in range(aug_matrix.cols):
                 aug_matrix[j, col_idx] -= fact * aug_matrix[i, col_idx]
 
-    # finding total pivots 
-    rank = 0
+    # finding total non-zero rows 
+    non_zero_rows = 0
+    non_zero_cols = 0
     for i in range(aug_matrix.rows):
-        if aug_matrix[i, i] != 0:
-            rank += 1
+        if any(abs(aug_matrix[i, j]) > EPS for j in range(aug_matrix.cols)):
+            non_zero_rows += 1
+
+    # finding total non-zero cols
+    for j in range(aug_matrix.cols):
+        if any(abs(aug_matrix[i, j]) > EPS for i in range(aug_matrix.rows)):
+            non_zero_cols += 1
     
-    return rank
-
-
+    return min(non_zero_rows, non_zero_cols)

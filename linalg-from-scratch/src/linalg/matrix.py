@@ -31,7 +31,7 @@ class Matrix:
         # Converting each row to string
         row_string = [str(row) for row in self.data]
 
-        # Intended Nice Output representation
+        # Nice Output representation
         return "[" + ",\n ".join(row_string) + "]"
 
     # Representation of matrix
@@ -55,7 +55,7 @@ class Matrix:
             if isinstance(value, list) and len(value) == self.cols:
                 self.data[index] = [float(v) for v in value] 
             else:
-                print("Not compatible")
+                return
 
         if isinstance(index, tuple):
             i, j = index
@@ -81,11 +81,11 @@ class Matrix:
     # Sub two matrix 
     def __sub__(self, other):
         if not isinstance(other, Matrix):
-            raise TypeError("Can only add another Matrix instance")
+            raise TypeError("Can only sub another Matrix instance")
         
         if self.rows != other.rows or self.cols != other.cols:
             raise ValueError(
-                f"Dimension mismatch for addition: ({self.rows}x{self.cols}) vs ({other.rows}x{other.cols})"
+                f"Dimension mismatch for subtraction: ({self.rows}x{self.cols}) vs ({other.rows}x{other.cols})"
             )
 
         new_data = [

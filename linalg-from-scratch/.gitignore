@@ -1,2 +1,40 @@
+# Python
 __pycache__/
+*.py[cod]
+*$py.class
+
+
+# Pytest
+.pytest_cache/
+
+# Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# macOS
 .DS_Store
+
+# Linux
+*~
+
+# Build / packaging
+build/
+dist/
+*.egg-info/
+
+# Environment variables
+.env
+.env.*
+
+# Python cache anywhere in project
+**/__pycache__/
