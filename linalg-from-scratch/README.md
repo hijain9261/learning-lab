@@ -219,7 +219,7 @@ There are 148 tests across three files:
 - `test_operations.py` covers every function with normal inputs.
 - `test_edge_cases.py` covers 1x1 matrices, zero matrices, vectors, rectangular matrices, tiny pivots, permutation matrices and checks that inputs are never modified.
 
-
+Test result: 
 ![Test results](images/tests-passed.png)
 
 <br>
